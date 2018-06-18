@@ -1,1 +1,5 @@
 /.idea
+/.idea/vcs.xml
+consts.pyc
+gobang.pyc
+render.pyc
