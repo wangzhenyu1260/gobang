@@ -1,2 +1,2 @@
 # gobang
-Gobang and ML
+The application of machine learning technique to gobang.
