@@ -1,9 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import pygame
-from pygame.locals import *
 from consts import *
-from gobang import GoBang
 
 IMAGE_PATH = 'images/'
 
@@ -71,7 +69,7 @@ class GameRender(object):
 
     def draw_result(self, result):
         font = pygame.font.SysFont('Helvetica', 50)
-        tips = u"End: "
+        tips = u"Game over: "
         if result == ChessboardState.BLACK:
             tips = tips + u"winner is black"
         elif result == ChessboardState.WHITE:
@@ -96,6 +94,8 @@ class GameRender(object):
                 return False
             else:
                 self.__gobang.set_chessboard_state(i, j, self.__currentPieceState)
+                list2.append((i, j))
+                list3.append((i, j))
                 return True
 
         return False

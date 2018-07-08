@@ -8,16 +8,20 @@ from sys import exit
 from consts import *
 from gobang import GoBang
 from render import GameRender
+from gobang_ai import GobangAI
 
 # from gobang_ai import GobangAI
 
 if __name__ == '__main__':
+    for i in range(N + 1):
+        for j in range(N + 1):
+            list_all.append((i, j))
+
     gobang = GoBang()
     render = GameRender(gobang)
-    # 先给AI留个接口
-    # ai = GobangAI(gobang, ChessboardState.WHITE)
+    ai = GobangAI(gobang, ChessboardState.WHITE)
     result = ChessboardState.EMPTY
-    enable_ai = False
+    enable_ai = True
 
     while True:
         # 捕捉pygame事件
@@ -34,7 +38,7 @@ if __name__ == '__main__':
                 if result != ChessboardState.EMPTY:
                     break
                 if enable_ai:
-                    # ai.one_step()
+                    ai.one_step()
                     result = gobang.get_chess_result()
                 else:
                     render.change_state()

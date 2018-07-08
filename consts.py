@@ -3,6 +3,14 @@
 from enum import Enum
 
 N = 15
+COLUMN = 15
+ROW = 15
+
+list1 = []  # AI (x,y) list
+list2 = []  # human (x,y) list
+list3 = []  # all
+
+list_all = []  # 整个棋盘的点
 
 
 class ChessboardState(Enum):
