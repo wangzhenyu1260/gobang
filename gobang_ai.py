@@ -1,14 +1,13 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-# Created by lenovo on 2018/6/24 15:09
 from consts import *
 
-next_point = [0, 0]  # AI下一步最应该下的位置
+next_point = [0, 0]  # AI next step
 
-ratio = 1  # 进攻的系数   大于1 进攻型，  小于1 防守型
-DEPTH = 1  # 搜索深度   只能是单数。  如果是负数， 评估函数评估的的是自己多少步之后的自己得分的最大值，并不意味着是最好的棋， 评估函数的问题
+ratio = 1  # Offensive coefficient. Greater than 1 offensive, less than 1 defensive
+DEPTH = 1  # Search depth.It can only be odd.
 
-# 棋型的评估分数
+# Chess type evaluation score
 shape_score = [(50, (0, 1, 1, 0, 0)),
                (50, (0, 0, 1, 1, 0)),
                (200, (1, 1, 0, 1, 0)),
@@ -35,7 +34,7 @@ class GobangAI(object):
         # ai next point
         i, j = self.ai()
         if not i is None and not j is None:
-            # 格子上已经有棋子
+            # There are already pieces on the chessboard.
             if self.__gobang.get_chessboard_state(i, j) != ChessboardState.EMPTY:
                 return False
             else:
@@ -46,29 +45,29 @@ class GobangAI(object):
         return False
 
     def ai(self):
-        global cut_count  # 统计剪枝次数
+        global cut_count  # count prune
         cut_count = 0
-        global search_count  # 统计搜索次数
+        global search_count  # count search
         search_count = 0
         self.negamax(True, DEPTH, -99999999, 99999999)
-        print("本次共剪枝次数：" + str(cut_count))
-        print("本次共搜索次数：" + str(search_count))
+        print("Prune count: " + str(cut_count))
+        print("Search count: " + str(search_count))
         return next_point[0], next_point[1]
 
-    # 负值极大算法搜索 alpha + beta剪枝
+    # Minimax & Alpha-Beta Pruning
     def negamax(self, is_ai, depth, alpha, beta):
-        # 游戏是否结束 | | 探索的递归深度是否到边界
+        # game over | | Whether the recursive depth of exploration reaches the boundary
         if self.game_win(list1) or self.game_win(list2) or depth == 0:
             return self.evaluation(is_ai)
         blank_list = list(set(list_all).difference(set(list3)))
-        self.order(blank_list)  # 搜索顺序排序  提高剪枝效率
-        # 遍历每一个候选步
+        self.order(blank_list)  # Search order sort  Improve pruning efficiency
+        # Evaluate each candidate step
         for next_step in blank_list:
 
             global search_count
             search_count += 1
 
-            # 如果要评估的位置没有相邻的子， 则不去评估  减少计算
+            # If there is no adjacent child in the position, then do not evaluate, reduce computational cost
             if not self.has_neightnor(next_step):
                 continue
 
@@ -91,7 +90,7 @@ class GobangAI(object):
                 if depth == DEPTH:
                     next_point[0] = next_step[0]
                     next_point[1] = next_step[1]
-                # alpha + beta剪枝点
+                # Alpha-Beta Pruning
                 if value >= beta:
                     global cut_count
                     cut_count += 1
@@ -99,7 +98,7 @@ class GobangAI(object):
                 alpha = value
         return alpha
 
-    #  离最后落子的邻居位置最有可能是最优点
+    #  The location of the neighbors from the last drop is most likely the best
     def order(self, blank_list):
         last_pt = list3[-1]
         for item in blank_list:
@@ -120,7 +119,7 @@ class GobangAI(object):
                     return True
         return False
 
-    # 评估函数
+    # Evaluation function
     def evaluation(self, is_ai):
         total_score = 0
 
@@ -131,8 +130,8 @@ class GobangAI(object):
             my_list = list2
             enemy_list = list1
 
-        # 算自己的得分
-        score_all_arr = []  # 得分形状的位置 用于计算如果有相交 得分翻倍
+        # Count AI score
+        score_all_arr = []  # The position of the score shape; if there is an intersection, the score doubles
         my_score = 0
         for pt in my_list:
             m = pt[0]
@@ -142,7 +141,7 @@ class GobangAI(object):
             my_score += self.cal_score(m, n, 1, 1, enemy_list, my_list, score_all_arr)
             my_score += self.cal_score(m, n, -1, 1, enemy_list, my_list, score_all_arr)
 
-        #  算敌人的得分， 并减去
+        #  Count the human's score, and subtract
         score_all_arr_enemy = []
         enemy_score = 0
         for pt in enemy_list:
@@ -157,19 +156,19 @@ class GobangAI(object):
 
         return total_score
 
-    # 每个方向上的分值计算
+    # Calculate the score in each direction
     def cal_score(self, m, n, x_decrict, y_derice, enemy_list, my_list, score_all_arr):
-        add_score = 0  # 加分项
-        # 在一个方向上， 只取最大的得分项
+        add_score = 0  # add score
+        # In one direction, only the largest score item is taken
         max_score_shape = (0, None)
 
-        # 如果此方向上，该点已经有得分形状，不重复计算
+        # If in this direction, the point already has a score shape, no double counting
         for item in score_all_arr:
             for pt in item[1]:
                 if m == pt[0] and n == pt[1] and x_decrict == item[2][0] and y_derice == item[2][1]:
                     return 0
 
-        # 在落子点 左右方向上循环查找得分形状
+        # Cycle through the score shape in the left and right direction of the drop point
         for offset in range(-5, 1):
             # offset = -2
             pos = []
@@ -186,7 +185,7 @@ class GobangAI(object):
             for (score, shape) in shape_score:
                 if tmp_shap5 == shape or tmp_shap6 == shape:
                     if tmp_shap5 == (1, 1, 1, 1, 1):
-                        print('wwwwwwwwwwwwwwwwwwwwwwwwwww')
+                        print('---------------------------')
                     if score > max_score_shape[0]:
                         max_score_shape = (score, ((m + (0 + offset) * x_decrict, n + (0 + offset) * y_derice),
                                                    (m + (1 + offset) * x_decrict, n + (1 + offset) * y_derice),
@@ -195,7 +194,7 @@ class GobangAI(object):
                                                    (m + (4 + offset) * x_decrict, n + (4 + offset) * y_derice)),
                                            (x_decrict, y_derice))
 
-        # 计算两个形状相交， 如两个3活 相交， 得分增加 一个子的除外
+        # Calculate the intersection of two shapes, such as two 3 live intersections
         if max_score_shape[1] is not None:
             for item in score_all_arr:
                 for pt1 in item[1]:

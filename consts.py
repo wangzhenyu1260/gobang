@@ -10,7 +10,7 @@ list1 = []  # AI (x,y) list
 list2 = []  # human (x,y) list
 list3 = []  # all
 
-list_all = []  # 整个棋盘的点
+list_all = []  # All chess pieces
 
 
 class ChessboardState(Enum):

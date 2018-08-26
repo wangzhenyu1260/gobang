@@ -30,7 +30,8 @@ class GoBang(object):
 
     def count_on_direction(self, i, j, xdirection, ydirection, color):
         count = 0
-        for step in range(1, 5):  # 除当前位置外,朝对应方向再看4步
+        # In addition to the current position, look at the corresponding direction for 4 more steps.
+        for step in range(1, 5):
             if xdirection != 0 and (j + xdirection * step < 0 or j + xdirection * step >= N):
                 break
             if ydirection != 0 and (i + ydirection * step < 0 or i + ydirection * step >= N):
@@ -42,7 +43,7 @@ class GoBang(object):
         return count
 
     def have_five(self, i, j, color):
-        # 四个方向计数 横 竖 左斜 右斜
+        # Counting in four directions: horizontal, vertical, left oblique, right oblique
         directions = [[(-1, 0), (1, 0)],
                       [(0, -1), (0, 1)],
                       [(-1, 1), (1, -1)],

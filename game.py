@@ -1,7 +1,5 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-# https://www.cnblogs.com/erwin/p/7828956.html
-# https://www.cnblogs.com/erwin/p/7835191.html
 import pygame
 from pygame.locals import *
 from sys import exit
@@ -9,8 +7,6 @@ from consts import *
 from gobang import GoBang
 from render import GameRender
 from gobang_ai import GobangAI
-
-# from gobang_ai import GobangAI
 
 if __name__ == '__main__':
     for i in range(N + 1):
@@ -24,31 +20,33 @@ if __name__ == '__main__':
     enable_ai = True
 
     while True:
-        # 捕捉pygame事件
+        # pygame event handle
         for event in pygame.event.get():
-            # 退出程序
+            # quit
             if event.type == QUIT:
                 exit()
             elif event.type == MOUSEBUTTONDOWN:
-                # 成功着棋
+                # human move
                 if render.one_step():
+                    # success
                     result = gobang.get_chess_result()
                 else:
                     continue
                 if result != ChessboardState.EMPTY:
                     break
                 if enable_ai:
+                    # AI move
                     ai.one_step()
                     result = gobang.get_chess_result()
                 else:
                     render.change_state()
 
-        # 绘制
+        # render
         render.draw_chess()
         render.draw_mouse()
 
         if result != ChessboardState.EMPTY:
             render.draw_result(result)
 
-        # 刷新
+        # update
         pygame.display.update()
