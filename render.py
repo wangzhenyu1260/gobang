@@ -19,11 +19,8 @@ class GameRender(object):
         # Black chess start
         self.__currentPieceState = ChessboardState.BLACK
 
-        # init pygame
-        pygame.init()
         # pygame.display.set_mode((width, height), flags, depth)
         self.__screen = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
-        pygame.display.set_caption('Gobang')
 
         # UI assets
         self.__ui_chessboard = pygame.image.load(IMAGE_PATH + 'chessboard.jpg').convert()
