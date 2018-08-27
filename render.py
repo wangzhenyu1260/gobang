@@ -66,7 +66,7 @@ class GameRender(object):
             self.__screen.blit(self.__ui_piece_white, (x - PIECE / 2, y - PIECE / 2))
 
     def draw_result(self, result):
-        font = pygame.font.SysFont('Helvetica', 40)
+        font = pygame.font.Font(None, 40)
         tips = u"Game over: "
         if result == ChessboardState.BLACK:
             tips = tips + u"winner is black"
