@@ -26,9 +26,11 @@ shape_score = [(50, (0, 1, 1, 0, 0)),
 
 
 class GobangAI(object):
-    def __init__(self, gobang, state):
+    def __init__(self, gobang, state, search_depth):
         self.__gobang = gobang
         self.__currentPieceState = state
+        global DEPTH
+        DEPTH = search_depth
 
     def one_step(self):
         # ai next point
