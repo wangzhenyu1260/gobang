@@ -116,7 +116,7 @@ def game_ai():
 
 def gameOver(result):
     # Game over screen
-    menuTitle = GameMenu(["GAME OVER"])
+    menuTitle = GameMenu(0, ["GAME OVER"])
     menuTitle.set_font(pygame.font.Font(None, 80))
     menuTitle.center_at(270, 200)
     menuTitle.set_highlight_color((255, 255, 255))
@@ -128,12 +128,12 @@ def gameOver(result):
         tips = "Winner is white"
     else:
         tips = "Tie"
-    resInfo = GameMenu([tips])
+    resInfo = GameMenu(0, [tips])
     resInfo.set_font(pygame.font.Font(None, 60))
     resInfo.center_at(270, 270)
     resInfo.set_highlight_color((255, 0, 0))
 
-    info = GameMenu(["Press ESC back to menu"])
+    info = GameMenu(0, ["Press ESC back to menu"])
     info.set_font(pygame.font.Font(None, 40))
     info.center_at(270, 320)
     info.set_highlight_color((255, 255, 255))
@@ -156,13 +156,11 @@ def gameOver(result):
 def settings():
     # Settings Menu Text
     # Title for Option Menu
-    menuTitle = GameMenu(["AI LEVEL"])
+    menuTitle = GameMenu(0, ["AI LEVEL"])
 
-    menu = GameMenu(
-        ["Normal", level_option1],
-        ["Hard", level_option2])
+    menu = GameMenu(0 if search_depth == 1 else 1, ["Normal", level_option1], ["Hard", level_option2])
 
-    info = GameMenu(["PRESS ESC TO RETURN"])
+    info = GameMenu(0, ["PRESS ESC TO RETURN"])
 
     # Settings Title Font color, aligment, and font type
     menuTitle.set_font(pygame.font.Font(None, 60))
@@ -195,6 +193,8 @@ def settings():
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    keepGoing = False
+                elif event.key == pygame.K_RETURN:
                     keepGoing = False
             elif event.type == QUIT:
                 keepGoing = False
@@ -236,13 +236,13 @@ def level_option2():
 
 
 def main():
-    menuTitle = GameMenu(["My Gobang"])
+    menuTitle = GameMenu(0, ["My Gobang"])
 
-    menu = GameMenu(
-        ["Human VS. AI", option1],
-        ["Human VS. Human", option2],
-        ["Settings", option3],
-        ["Exit", option4])
+    menu = GameMenu(0,
+                    ["Human VS. AI", option1],
+                    ["Human VS. Human", option2],
+                    ["Settings", option3],
+                    ["Exit", option4])
 
     # Title
     menuTitle.set_font(pygame.font.Font(None, 60))

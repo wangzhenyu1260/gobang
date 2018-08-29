@@ -5,12 +5,12 @@ import pygame
 
 class GameMenu:
     # Define the initalize self options
-    def __init__(self, *options):
+    def __init__(self, start=0, *options):
         self.options = options
         self.x = 0
         self.y = 0
         self.font = pygame.font.Font(None, 32)
-        self.option = 0
+        self.option = start
         self.width = 1
         self.color = [0, 0, 0]
         self.hcolor = [0, 0, 0]
