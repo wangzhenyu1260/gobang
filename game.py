@@ -65,8 +65,8 @@ def game_ai():
     del list2[:]
     del list3[:]
     del list_all[:]
-    for i in range(N + 1):
-        for j in range(N + 1):
+    for i in range(COLUMN):
+        for j in range(ROW):
             list_all.append((i, j))
 
     gobang = GoBang()
