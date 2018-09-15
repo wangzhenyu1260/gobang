@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 from consts import *
+import random
 
 next_point = [0, 0]  # AI next step
 
@@ -25,7 +26,7 @@ shape_score = [(50, (0, 1, 1, 0, 0)),
                (99999999, (1, 1, 1, 1, 1))]
 
 
-class GobangAI(object):
+class GobangAI2(object):
     def __init__(self, gobang, state, search_depth):
         self.__gobang = gobang
         self.__currentPieceState = state
@@ -41,19 +42,23 @@ class GobangAI(object):
                 return False
             else:
                 self.__gobang.set_chessboard_state(i, j, self.__currentPieceState)
-                list1.append((i, j))
+                list2.append((i, j))
                 list3.append((i, j))
                 return True
         return False
 
     def ai(self):
-        global cut_count  # count prune
-        cut_count = 0
-        global search_count  # count search
-        search_count = 0
-        self.negamax(True, DEPTH, -99999999, 99999999)
-        print("Prune count: " + str(cut_count))
-        print("Search count: " + str(search_count))
+        # global cut_count  # count prune
+        # cut_count = 0
+        # global search_count  # count search
+        # search_count = 0
+        if len(list3) == 0:
+            next_point[0] = random.randint(0, 14)
+            next_point[1] = random.randint(0, 14)
+        else:
+            self.negamax(True, DEPTH, -99999999, 99999999)
+        # print("Prune count: " + str(cut_count))
+        # print("Search count: " + str(search_count))
         return next_point[0], next_point[1]
 
     # Minimax & Alpha-Beta Pruning
@@ -66,36 +71,36 @@ class GobangAI(object):
         # Evaluate each candidate step
         for next_step in blank_list:
 
-            global search_count
-            search_count += 1
+            # global search_count
+            # search_count += 1
 
             # If there is no adjacent child in the position, then do not evaluate, reduce computational cost
             if not self.has_neightnor(next_step):
                 continue
 
             if is_ai:
-                list1.append(next_step)
-            else:
                 list2.append(next_step)
+            else:
+                list1.append(next_step)
             list3.append(next_step)
 
             value = -self.negamax(not is_ai, depth - 1, -beta, -alpha)
             if is_ai:
-                list1.remove(next_step)
-            else:
                 list2.remove(next_step)
+            else:
+                list1.remove(next_step)
             list3.remove(next_step)
 
             if value > alpha:
-                print(str(value) + "alpha:" + str(alpha) + "beta:" + str(beta))
-                print(list3)
+                # print(str(value) + "alpha:" + str(alpha) + "beta:" + str(beta))
+                # print(list3)
                 if depth == DEPTH:
                     next_point[0] = next_step[0]
                     next_point[1] = next_step[1]
                 # Alpha-Beta Pruning
                 if value >= beta:
-                    global cut_count
-                    cut_count += 1
+                    # global cut_count
+                    # cut_count += 1
                     return beta
                 alpha = value
         return alpha
@@ -128,11 +133,11 @@ class GobangAI(object):
         total_score = 0
 
         if is_ai:
-            my_list = list1
-            enemy_list = list2
-        else:
             my_list = list2
             enemy_list = list1
+        else:
+            my_list = list1
+            enemy_list = list2
 
         # Count AI score
         score_all_arr = []  # The position of the score shape; if there is an intersection, the score doubles
@@ -188,8 +193,8 @@ class GobangAI(object):
 
             for (score, shape) in shape_score:
                 if tmp_shap5 == shape or tmp_shap6 == shape:
-                    if tmp_shap5 == (1, 1, 1, 1, 1):
-                        print('---------------------------')
+                    # if tmp_shap5 == (1, 1, 1, 1, 1):
+                    #     print('---------------------------')
                     if score > max_score_shape[0]:
                         max_score_shape = (score, ((m + (0 + offset) * x_decrict, n + (0 + offset) * y_derice),
                                                    (m + (1 + offset) * x_decrict, n + (1 + offset) * y_derice),

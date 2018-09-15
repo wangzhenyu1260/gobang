@@ -7,6 +7,7 @@ from consts import *
 from gobang import GoBang
 from render import GameRender
 from gobang_ai import GobangAI
+from gobang_ai2 import GobangAI2
 from gameMenu import GameMenu
 
 pygame.init()
@@ -20,6 +21,7 @@ background = background.convert()
 background.fill((100, 100, 255))
 
 search_depth = 1
+
 
 def game():
     gobang = GoBang()
@@ -100,6 +102,50 @@ def game_ai():
                     result = gobang.get_chess_result()
                 else:
                     render.change_state()
+
+        # render
+        render.draw_chess()
+        render.draw_mouse()
+
+        if result != ChessboardState.EMPTY:
+            # render.draw_result(result)
+            gameOver(result)
+            keepGoing = False
+
+        # update
+        pygame.display.update()
+
+
+def game_ai_ai():
+    del list1[:]
+    del list2[:]
+    del list3[:]
+    del list_all[:]
+    for i in range(COLUMN):
+        for j in range(ROW):
+            list_all.append((i, j))
+
+    gobang = GoBang()
+    render = GameRender(gobang)
+    ai = GobangAI(gobang, ChessboardState.WHITE, search_depth)
+    ai2 = GobangAI2(gobang, ChessboardState.BLACK, search_depth)
+    result = ChessboardState.EMPTY
+    keepGoing = True
+
+    while keepGoing:
+        ai2.one_step()
+        result = gobang.get_chess_result()
+        ai.one_step()
+        result = gobang.get_chess_result()
+        render.change_state()
+        # pygame event handle
+        for event in pygame.event.get():
+            # quit
+            if event.type == QUIT:
+                keepGoing = False
+            elif event.type == KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    keepGoing = False
 
         # render
         render.draw_chess()
@@ -217,10 +263,14 @@ def option2():
 
 
 def option3():
-    settings()
+    game_ai_ai()
 
 
 def option4():
+    settings()
+
+
+def option5():
     pygame.quit()
     exit()
 
@@ -241,8 +291,9 @@ def main():
     menu = GameMenu(0,
                     ["Human VS. AI", option1],
                     ["Human VS. Human", option2],
-                    ["Settings", option3],
-                    ["Exit", option4])
+                    ["AI VS. AI", option3],
+                    ["Settings", option4],
+                    ["Exit", option5])
 
     # Title
     menuTitle.set_font(pygame.font.Font(None, 60))
