@@ -23,6 +23,10 @@ background.fill((100, 100, 255))
 
 search_depth = 1
 
+black_win_count = 0
+white_win_count = 0
+tie_count = 0
+
 
 def game():
     gobang = GoBang()
@@ -56,7 +60,7 @@ def game():
 
         if result != ChessboardState.EMPTY:
             # render.draw_result(result)
-            gameOver(result)
+            gameOver(result, True)
             keepGoing = False
 
         # update
@@ -110,14 +114,14 @@ def game_ai():
 
         if result != ChessboardState.EMPTY:
             # render.draw_result(result)
-            gameOver(result)
+            gameOver(result, True)
             keepGoing = False
 
         # update
         pygame.display.update()
 
 
-def game_ai_ai():
+def game_ai_ai(displayResult):
     del list1[:]
     del list2[:]
     del list3[:]
@@ -155,14 +159,14 @@ def game_ai_ai():
 
         if result != ChessboardState.EMPTY:
             # render.draw_result(result)
-            gameOver(result)
+            gameOver(result, displayResult)
             keepGoing = False
 
         # update
         pygame.display.update()
 
 
-def gameOver(result):
+def gameOver(result, displayResult):
     # Game over screen
     menuTitle = GameMenu(0, ["GAME OVER"])
     menuTitle.set_font(pygame.font.Font(None, 80))
@@ -172,10 +176,16 @@ def gameOver(result):
     # Game result
     if result == ChessboardState.BLACK:
         tips = "Winner is black"
+        global black_win_count
+        black_win_count += 1
     elif result == ChessboardState.WHITE:
         tips = "Winner is white"
+        global white_win_count
+        white_win_count += 1
     else:
         tips = "Tie"
+        global tie_count
+        tie_count += 1
     resInfo = GameMenu(0, [tips])
     resInfo.set_font(pygame.font.Font(None, 60))
     resInfo.center_at(270, 270)
@@ -186,7 +196,7 @@ def gameOver(result):
     info.center_at(270, 320)
     info.set_highlight_color((255, 255, 255))
 
-    keepGoing = True
+    keepGoing = displayResult
     while keepGoing:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -265,14 +275,22 @@ def option2():
 
 
 def option3():
-    game_ai_ai()
+    game_ai_ai(True)
 
 
 def option4():
-    settings()
+    for i in range(200):
+        game_ai_ai(False)
+    print("Black win count: " + str(black_win_count))
+    print("White win count: " + str(white_win_count))
+    print("Tie count: " + str(tie_count))
 
 
 def option5():
+    settings()
+
+
+def option6():
     pygame.quit()
     exit()
 
@@ -294,8 +312,9 @@ def main():
                     ["Human VS. AI", option1],
                     ["Human VS. Human", option2],
                     ["AI VS. AI", option3],
-                    ["Settings", option4],
-                    ["Exit", option5])
+                    ["AI VS. AI(200 Times)", option4],
+                    ["Settings", option5],
+                    ["Exit", option6])
 
     # Title
     menuTitle.set_font(pygame.font.Font(None, 60))
