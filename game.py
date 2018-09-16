@@ -8,6 +8,7 @@ from gobang import GoBang
 from render import GameRender
 from gobang_ai import GobangAI
 from gobang_ai2 import GobangAI2
+from testAI.gomoku_ai import gomokuAI
 from gameMenu import GameMenu
 
 pygame.init()
@@ -128,7 +129,8 @@ def game_ai_ai():
     gobang = GoBang()
     render = GameRender(gobang)
     ai = GobangAI(gobang, ChessboardState.WHITE, search_depth)
-    ai2 = GobangAI2(gobang, ChessboardState.BLACK, search_depth)
+    # ai2 = GobangAI2(gobang, ChessboardState.BLACK, search_depth)
+    ai2 = gomokuAI(gobang, ChessboardState.BLACK, search_depth)
     result = ChessboardState.EMPTY
     keepGoing = True
 
