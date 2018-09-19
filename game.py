@@ -121,7 +121,7 @@ def game_ai():
         pygame.display.update()
 
 
-def game_ai_ai(displayResult):
+def game_ai_ai(displayResult, selfGame):
     del list1[:]
     del list2[:]
     del list3[:]
@@ -133,8 +133,10 @@ def game_ai_ai(displayResult):
     gobang = GoBang()
     render = GameRender(gobang)
     ai = GobangAI(gobang, ChessboardState.WHITE, search_depth)
-    # ai2 = GobangAI2(gobang, ChessboardState.BLACK, search_depth)
-    ai2 = gomokuAI(gobang, ChessboardState.BLACK, search_depth)
+    if selfGame:
+        ai2 = GobangAI2(gobang, ChessboardState.BLACK, search_depth)
+    else:
+        ai2 = gomokuAI(gobang, ChessboardState.BLACK, search_depth)
     result = ChessboardState.EMPTY
     keepGoing = True
 
@@ -280,17 +282,25 @@ def option3():
 
 def option4():
     for i in range(200):
-        game_ai_ai(False)
+        game_ai_ai(False, False)
     print("Black win count: " + str(black_win_count))
     print("White win count: " + str(white_win_count))
     print("Tie count: " + str(tie_count))
 
 
 def option5():
-    settings()
+    for i in range(200):
+        game_ai_ai(False, True)
+    print("Black win count: " + str(black_win_count))
+    print("White win count: " + str(white_win_count))
+    print("Tie count: " + str(tie_count))
 
 
 def option6():
+    settings()
+
+
+def option7():
     pygame.quit()
     exit()
 
@@ -313,8 +323,9 @@ def main():
                     ["Human VS. Human", option2],
                     ["AI VS. AI", option3],
                     ["AI VS. AI(200 Times)", option4],
-                    ["Settings", option5],
-                    ["Exit", option6])
+                    ["Self battle(200 Times)", option5],
+                    ["Settings", option6],
+                    ["Exit", option7])
 
     # Title
     menuTitle.set_font(pygame.font.Font(None, 60))
