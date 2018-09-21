@@ -277,7 +277,7 @@ def option2():
 
 
 def option3():
-    game_ai_ai(True)
+    game_ai_ai(True, False)
 
 
 def option4():
